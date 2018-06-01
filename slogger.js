@@ -36,7 +36,7 @@ const SLogger = function() {
             debug = que;
         },
         consol: function (type, message) {
-            console.log(logCompositor('log',message));
+            console.log(this.logCompositor('log',message));
         },
         logFileCompositor: function(type, message) {
             return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + '|' + type + '|' + message + '\n';
@@ -46,7 +46,7 @@ const SLogger = function() {
         },
         writeToFile: function(type,message) {
             if (logfile!='') {
-                fs.appendFile(logfile, logFileCompositor(type,message), function (err) {
+                fs.appendFile(logfile, this.logFileCompositor(type,message), function (err) {
                     if (err) {
                         this.consol('error',"SLogger Error: Log file Error");
                         throw err;
