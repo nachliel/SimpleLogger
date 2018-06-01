@@ -11,6 +11,25 @@ const SLogger = function() {
     let logFile = '';
     let debug = false;
     let enableConsole = true;
+    const consol = function (type, message) {
+        console.log(logCompositor('log',message));
+    };
+    const logFileCompositor = function(type, message) {
+        return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + '|' + type + '|' + message + '\n';
+    };
+    const logCompositor =  function(type, message) {
+        return type + ': ' + message;
+    };
+    const writeToFile = function(type,message) {
+        if (logfile!='') {
+            fs.appendFile(logfile, logFileCompositor(type,message), function (err) {
+                if (err) {
+                    consol('error',"SLogger Error: Log file Error");
+                    throw err;
+                }
+              });
+          }  
+    };
     return {
         segetLogFile: function (filepath) {
             if (filepath===undefined)
@@ -19,7 +38,7 @@ const SLogger = function() {
                 logfile = filepath;
             fs.writeFile(filepath, '', function (err) {
                 if (err) {
-                    this.consol('error',"SLogger Error: Log file Error.");
+                    consol('error',"SLogger Error: Log file Error.");
                     throw err;
                 }
                 //Success
@@ -35,52 +54,34 @@ const SLogger = function() {
                 return debug;
             debug = que;
         },
-        consol: function (type, message) {
-            console.log(this.logCompositor('log',message));
-        },
-        logFileCompositor: function(type, message) {
-            return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + '|' + type + '|' + message + '\n';
-        },
-        logCompositor: function(type, message) {
-            return type + ': ' + message;
-        },
-        writeToFile: function(type,message) {
-            if (logfile!='') {
-                fs.appendFile(logfile, this.logFileCompositor(type,message), function (err) {
-                    if (err) {
-                        this.consol('error',"SLogger Error: Log file Error");
-                        throw err;
-                    }
-                  });
-              }  
-        },
+        
         log: function (message) {
             // write message to `this.logfile`
             if (enableConsole)
-                this.consol('log',message);
+                consol('log',message);
             if (logfile != '') 
-                this.writeToFile('log',message);  
+                writeToFile('log',message);  
         },
         error: function (message){
             if (enableConsole)
-                this.consol('error', message);
+                consol('error', message);
             if (logfile!='') {
-                this.writeToFile('error',message);
+                writeToFile('error',message);
             }  
         },
         info: function (message) {
             if (enableConsole)
-                this.consol('info', message);
+                consol('info', message);
             if (logfile!='') {
-                this.writeToFile('info',message);
+                writeToFile('info',message);
             }  
         },
         debug: function (message) {
             if (debug) {
                 if (enableConsole)
-                    this.consol('debug', message);
+                    consol('debug', message);
                 if (logfile!='')
-                    this.writeToFile('debug',message);
+                    writeToFile('debug',message);
             }
         }
     }
