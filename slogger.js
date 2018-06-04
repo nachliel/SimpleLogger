@@ -5,7 +5,7 @@
     Write Log to file
     Enable/Disable Console
 */
-use strict;
+"use strict";
 //Require and constants
 const fs = require('fs');
 const LOG = "log ";
