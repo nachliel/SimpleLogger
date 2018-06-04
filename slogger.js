@@ -5,13 +5,14 @@
     Write Log to file
     Enable/Disable Console
 */
-"use strict";
+'use strict';
+
 //Require and constants
 const fs = require('fs');
-const LOG = "log ";
-const DEBUG = "debug";
-const ERROR = "error";
-const INFO = "info";
+const LOG = 'log ';
+const DEBUG = 'debug';
+const ERROR = 'error';
+const INFO = 'info';
 
 const SLogger = function() {
     let logFile = '';
@@ -30,7 +31,7 @@ const SLogger = function() {
         if (logfile!='') {
             fs.appendFile(logfile, logFileCompositor(type,message), function (err) {
                 if (err) {
-                    consol(ERROR,"SLogger Error: Log file Error");
+                    consol(ERROR,'SLogger Error: Log file Error');
                     throw err;
                 }
               });
@@ -44,7 +45,7 @@ const SLogger = function() {
                 logfile = filepath;
             fs.writeFile(filepath, '', function (err) {
                 if (err) {
-                    consol(ERROR,"SLogger Error: Log file Error.");
+                    consol(ERROR,'SLogger Error: Log file Error.');
                     throw err;
                 }
                 //Success
