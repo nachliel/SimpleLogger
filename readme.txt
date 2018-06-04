@@ -10,5 +10,5 @@ logger.log("Simple comment");
 logger.error("error notification!");
 //debug log:
 logger.debug("bug bug bug!!");
-//debug log:
-logger.debug("bug bug bug!!");
+//information log:
+logger.info("did you know?!");
