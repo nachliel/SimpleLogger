@@ -5,14 +5,19 @@
     Write Log to file
     Enable/Disable Console
 */
-var fs = require('fs');
+//Require and constants
+const fs = require('fs');
+const LOG = "log ";
+const DEBUG = "debug";
+const ERROR = "error";
+const INFO = "info";
 
 const SLogger = function() {
     let logFile = '';
     let debug = false;
     let enableConsole = true;
     const consol = function (type, message) {
-        console.log(logCompositor('log',message));
+        console.log(logCompositor(LOG,message));
     };
     const logFileCompositor = function(type, message) {
         return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') + '|' + type + '|' + message + '\n';
@@ -24,7 +29,7 @@ const SLogger = function() {
         if (logfile!='') {
             fs.appendFile(logfile, logFileCompositor(type,message), function (err) {
                 if (err) {
-                    consol('error',"SLogger Error: Log file Error");
+                    consol(ERROR,"SLogger Error: Log file Error");
                     throw err;
                 }
               });
@@ -33,12 +38,12 @@ const SLogger = function() {
     return {
         segetLogFile: function (filepath) {
             if (filepath===undefined)
-                return logfile;
+                return logfile || '';
             else
                 logfile = filepath;
             fs.writeFile(filepath, '', function (err) {
                 if (err) {
-                    consol('error',"SLogger Error: Log file Error.");
+                    consol(ERROR,"SLogger Error: Log file Error.");
                     throw err;
                 }
                 //Success
@@ -56,32 +61,31 @@ const SLogger = function() {
         },
         
         log: function (message) {
-            // write message to `this.logfile`
             if (enableConsole)
-                consol('log',message);
+                consol(LOG,message);
             if (logfile != '') 
-                writeToFile('log',message);  
+                writeToFile(LOG,message);  
         },
         error: function (message){
             if (enableConsole)
-                consol('error', message);
+                consol(ERROR, message);
             if (logfile!='') {
-                writeToFile('error',message);
+                writeToFile(ERROR,message);
             }  
         },
         info: function (message) {
             if (enableConsole)
-                consol('info', message);
+                consol(INFO, message);
             if (logfile!='') {
-                writeToFile('info',message);
+                writeToFile(INFO,message);
             }  
         },
         debug: function (message) {
             if (debug) {
                 if (enableConsole)
-                    consol('debug', message);
+                    consol(DEBUG, message);
                 if (logfile!='')
-                    writeToFile('debug',message);
+                    writeToFile(DEBUG,message);
             }
         }
     }
