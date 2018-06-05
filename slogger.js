@@ -15,12 +15,11 @@ const ERROR = 'error';
 const INFO = 'info';
 
 module.exports = function() {
-    let logFile = '';
+    let logFile;
     let debug = false;
     let enableConsole = true;
-    const date = new Date();
 
-    // Consol prints log on console. require type and message.
+    // Consol prints log only to console. require type and message.
     const consol = function (type, message) {
         console.log(logCompositor(type,message));
     };
@@ -36,19 +35,19 @@ module.exports = function() {
 
     // Write the message to a file.
     const writeToFile = function(type,message) {
-        if (logFile!='') {
+        if (logFile !== undefined) {
             fs.appendFile(logFile, logFileCompositor(type,message), function (err) {
                 if (err) {
                     consol(ERROR,'SLogger Error: Log file Error');
                     throw err;
                 }
-              });
-          }  
+            });
+        }
     };
     return {
         // Set or Get the filepath to use. each logger have only one file.
         segetLogFile: function (filepath) {
-            if (filepath===undefined)
+            if (filepath === undefined)
                 return logFile || '';
             else
                 logFile = filepath;
@@ -57,23 +56,23 @@ module.exports = function() {
                     consol(ERROR,'SLogger Error: Log file Error.');
                     throw err;
                 }
-              });
+            });
         }, // Set or Return console mode. default true. require bool to enable/Disable
-        consoleEnabled: function(que) {                
+        consoleEnabled: function(que) {
             if (que===undefined)
                 return enableConsole;
-            
-            if (typeof(que) == 'boolean')
+
+            if (typeof(que) === 'boolean')
                 enableConsole = que;
             else
                 consol(ERROR,'SLogger Error: consoleEnabled Require bool type!');
-   
+
         }, //Set or return Debug mode, default false. require bool to enable/Disable
         debugEnabled: function(que) {
-            if (que===undefined)
+            if (que === undefined)
                 return debug;
-   
-            if (typeof(que) == 'boolean')
+
+            if (typeof(que) === 'boolean')
                 debug = que;
             else
                 consol(ERROR,'SLogger Error: debugEnabled Require bool type!');
@@ -81,28 +80,28 @@ module.exports = function() {
         log: function (message) {
             if (enableConsole)
                 consol(LOG,message);
-            if (logFile != '') 
-                writeToFile(LOG,message);  
-        }, 
+            if (logFile !== undefined)
+                writeToFile(LOG,message);
+        },
         error: function (message){
             if (enableConsole)
                 consol(ERROR, message);
-            if (logFile!='') {
+            if (logFile !== undefined) {
                 writeToFile(ERROR,message);
-            }  
+            }
         },
         info: function (message) {
             if (enableConsole)
                 consol(INFO, message);
-            if (logFile!='') {
+            if (logFile !== undefined) {
                 writeToFile(INFO,message);
-            }  
+            }
         },
         debug: function (message) {
             if (debug) {
                 if (enableConsole)
                     consol(DEBUG, message);
-                if (logFile!='')
+                if (logFile !== undefined)
                     writeToFile(DEBUG,message);
             }
         }
