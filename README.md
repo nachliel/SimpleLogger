@@ -1,7 +1,7 @@
 # Simple Logger Simplog
 
 ## Usage:
-
+```javascript
 const logger = require("slogger")();
 logger.segetLogFile('log.log');
 logger.debugEnabled(true);
@@ -14,3 +14,4 @@ logger.error("error notification!");
 logger.debug("bug bug bug!!");
 //information log:
 logger.info("did you know?!");
+```
