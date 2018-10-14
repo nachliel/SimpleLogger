@@ -1,4 +1,6 @@
-Usage:
+#Simple Logger Simplog
+
+##Usage:
 
 const logger = require("slogger")();
 logger.segetLogFile('log.log');
